@@ -37,9 +37,7 @@ public class ReactNativeCheckAppModule extends ReactContextBaseJavaModule {
             List<PackageInfo> packages = this.reactContext.getPackageManager().getInstalledPackages(0);
             String ret = "";
             for (final PackageInfo p: packages) {
-                if ((p.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                     ret += p.packageName + ";";
-                }
             }
 
             promise.resolve(ret);
