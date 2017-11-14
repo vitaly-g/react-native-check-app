@@ -43,8 +43,8 @@ public class ReactNativeCheckAppModule extends ReactContextBaseJavaModule {
             }
 
             promise.resolve(ret);
-        } catch (IllegalViewOperationException e) {
-            promise.reject(E_LAYOUT_ERROR, e);
+        } catch (Exception e) {
+            promise.reject("Error", e);
         }
     } 
     
