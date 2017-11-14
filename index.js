@@ -1,10 +1,10 @@
-var installedApps = require('react-native').NativeModules.ReactNativeCheckApp;
+const installedApps = require('react-native').NativeModules.ReactNativeCheckApp;
 
-module.exports = {
-    getApps: function() {
-        return installedApps.getApps;
-    },
-    getNonSystemApps: function(){
-        return installedApps.getNonSystemApps;
-    }
-};
+module.exports = installedApps;
+
+// module.exports = {
+//     getApps: function() {
+//         return installedApps.getApps;
+//     }
+   
+// };

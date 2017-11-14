@@ -7,7 +7,7 @@ import android.content.pm.ApplicationInfo;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,38 +30,28 @@ public class ReactNativeCheckAppModule extends ReactContextBaseJavaModule {
         return "ReactNativeCheckApp";
     }
 
-    private List<String> getApps() {
-        List<PackageInfo> packages = this.reactContext
-            .getPackageManager()
-            .getInstalledPackages(0);
-
-        List<String> ret = new ArrayList<>();
-        for (final PackageInfo p: packages) {
-            ret.add(p.packageName);
-        }
-        return ret;
-    }
-
-    private List<String> getNonSystemApps() {
-        List<PackageInfo> packages = this.reactContext
-            .getPackageManager()
-            .getInstalledPackages(0);
-
-        List<String> ret = new ArrayList<>();
-        for (final PackageInfo p: packages) {
-            if ((p.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
-                ret.add(p.packageName);
+    @ReactMethod
+    private void getApps(Promise promise) {
+        try {
+            List<PackageInfo> packages = this.reactContext.getPackageManager().getInstalledPackages(0);
+            String ret = "";
+            for (final PackageInfo p: packages) {
+                if ((p.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                    //ret.add(p.packageName);
+                    ret += p.packageName;
+                }
             }
+
+            promise.resolve(ret);
+        } catch (IllegalViewOperationException e) {
+            promise.reject(E_LAYOUT_ERROR, e);
         }
-        return ret;
     } 
     
-    @Override
-    public @Nullable Map<String, Object> getConstants() {
-        Map<String, Object> constants = new HashMap<>();
-
-        constants.put("getApps", getApps());
-        constants.put("getNonSystemApps", getNonSystemApps());
-        return constants;
-    }
+    // @Override
+    // public @Nullable Map<String, Object> getConstants() {
+    //     Map<String, Object> constants = new HashMap<>();
+    //     constants.put("getApps", getApps());
+    //     return constants;
+    // }
 }
